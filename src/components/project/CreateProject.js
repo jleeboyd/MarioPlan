@@ -1,4 +1,7 @@
 import React, {Component} from 'react';
+import { connect } from 'react-redux';
+import {createProject} from '../../store/actions/projectActions'; //from projectActions 
+
 
 class CreateProject extends Component
 {
@@ -22,7 +25,8 @@ class CreateProject extends Component
     handleSubmit = (e) =>
     {
         e.preventDefault(); // prevent default reload of page on submission
-        console.log(this.state); //log submitted email and password to console
+        // console.log(this.state); //log submitted email and password to console
+        this.props.createProject(this.state); //to mapDispatchToProps
     }
     render()
     {
@@ -46,5 +50,11 @@ class CreateProject extends Component
         )
     }
 }
-
-export default CreateProject;
+//when call props.createProject run map function, perform dispatch, 
+//which will return projectActions function that can halt dispatch and make async call.
+const mapDispatchToProps = (dispatch) => {
+    return {
+        createProject:(project) => dispatch(createProject(project))
+    }
+}
+export default connect(null, mapDispatchToProps)(CreateProject); //null for mapStateToProps placeholder

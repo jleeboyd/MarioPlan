@@ -1,14 +1,19 @@
 import React from 'react';
 import ProjectSummary from './ProjectSummary';
 
-const ProjectList = () => 
+{/* map function cycles through project elements in project object */}
+{/* Pass individual projects with their corresponding key number */}
+{/*projects && used to say do not display anything if there are not projects*/}
+
+const ProjectList = ({projects}) => 
 {
     return(
         <div className="project-list section">
-            <ProjectSummary />
-            <ProjectSummary />
-            <ProjectSummary />
-            <ProjectSummary />
+            {projects && projects.map(project =>{ 
+                return (
+                    <ProjectSummary project={project} key={project.id} /> 
+                )
+            })}
         </div>
     )
 }
