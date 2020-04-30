@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import {createProject} from '../../store/actions/projectActions'; //from projectActions 
+import {Redirect} from 'react-router-dom'; //video #27 route guarding
 
 
 class CreateProject extends Component
@@ -30,26 +31,40 @@ class CreateProject extends Component
     }
     render()
     {
-        return(
-            <div className="container">
-                <form onSubmit={this.handleSubmit} className="white">   {/**No parenthesis handleSubmit() so it will be fired on change not by page load */}
-                    <h5 className="grey-text text-darken-3">Create new project</h5>
-                    <div className="input-field">                       {/*materialize css */}
-                        <label htmlFor="title">Title</label>            {/*htmlFor specifies which form element label belongs to*/}
-                        <input type="text" id="title" onChange={this.handleChange}/>
-                    </div>
-                    <div className="input-field">
-                        <label htmlFor="content">Project Content</label>      {/*htmlFor specifies which form element label belongs to*/}
-                        <textarea className="materialize-textarea" id="content" onChange={this.handleChange}></textarea>
-                    </div>     
-                    <div className="input-field">
-                        <button className="btn pink lighten-1 z-depth-0">Login</button>
-                    </div>       
-                </form>
-            </div>
-        )
+        //redirect user to signin if not logged in
+        const {auth} = this.props;
+        if(!auth.uid) {
+            return( <Redirect to="/signin" /> )
+        }
+        else{
+            return(
+                <div className="container">
+                    <form onSubmit={this.handleSubmit} className="white">   {/**No parenthesis handleSubmit() so it will be fired on change not by page load */}
+                        <h5 className="grey-text text-darken-3">Create new project</h5>
+                        <div className="input-field">                       {/*materialize css */}
+                            <label htmlFor="title">Title</label>            {/*htmlFor specifies which form element label belongs to*/}
+                            <input type="text" id="title" onChange={this.handleChange}/>
+                        </div>
+                        <div className="input-field">
+                            <label htmlFor="content">Project Content</label>      {/*htmlFor specifies which form element label belongs to*/}
+                            <textarea className="materialize-textarea" id="content" onChange={this.handleChange}></textarea>
+                        </div>     
+                        <div className="input-field">
+                            <button className="btn pink lighten-1 z-depth-0">Create</button>
+                        </div>       
+                    </form>
+                </div>
+            )
+        }
     }
 }
+// video #27
+const mapStateToProps = (state) => {
+    return{
+        auth: state.firebase.auth
+    }
+}
+
 //when call props.createProject run map function, perform dispatch, 
 //which will return projectActions function that can halt dispatch and make async call.
 const mapDispatchToProps = (dispatch) => {
@@ -57,4 +72,4 @@ const mapDispatchToProps = (dispatch) => {
         createProject:(project) => dispatch(createProject(project))
     }
 }
-export default connect(null, mapDispatchToProps)(CreateProject); //null for mapStateToProps placeholder
+export default connect(mapStateToProps, mapDispatchToProps)(CreateProject); //null for mapStateToProps placeholder

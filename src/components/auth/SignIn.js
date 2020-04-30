@@ -1,4 +1,7 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux'; //video #23
+import {signIn} from '../../store/actions/authActions'; //connect with actions from dispatch
+import {Redirect} from 'react-router-dom'; //video #27 route guarding
 
 class Signin extends Component
 {
@@ -22,10 +25,17 @@ class Signin extends Component
     handleSubmit = (e) =>
     {
         e.preventDefault(); // prevent default reload of page on submission
-        console.log(this.state); //log submitted email and password to console
+        // console.log(this.state); //log submitted email and password to console
+        this.props.signIn(this.state); //state is email and pass to authActions
     }
     render()
     {
+        const {authError, auth} = this.props;
+        //redirects if user IS signed in video #27
+        if (auth.uid)
+        {
+            return(<Redirect to='/' />)
+        }
         return(
             <div className="container">
                 <form onSubmit={this.handleSubmit} className="white">   {/**No parenthesis handleSubmit() so it will be fired on change not by page load */}
@@ -40,6 +50,9 @@ class Signin extends Component
                     </div>     
                     <div className="input-field">
                         <button className="btn pink lighten-1 z-depth-0">Login</button>
+                        <div className = "red-text" center>
+                            {authError ? <p>{authError}</p> : null} {/**if authError = null = false. authError from authAction->authReducer*/}
+                        </div>
                     </div>       
                 </form>
             </div>
@@ -47,4 +60,17 @@ class Signin extends Component
     }
 }
 
-export default Signin;
+//video #23
+const mapStateToProps = (state) => {
+    return {
+        authError: state.auth.authError, //state.auth for root reducer, authError for authReducer 
+        auth: state.firebase.auth
+    }
+}
+const mapDispatchToProps = (dispatch) =>
+{
+    return{
+        signIn: (creds) => dispatch(signIn(creds)) //creds from authActions
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Signin); //connect(mapState,mapDispatch)

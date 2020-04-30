@@ -1,5 +1,7 @@
 import React from 'react';
 
+//called from projectList
+
 const ProjectSummary = ({project}) => 
 {
     return(

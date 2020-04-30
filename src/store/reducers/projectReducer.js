@@ -7,15 +7,18 @@ const initState = {
 };
 
 //return default initial state of initState in projectReducer
-//
 const projectReducer = (state = initState, action) => { 
     //need to check createProject
-    //if action type is create_project log that action
     switch(action.type){
-        case 'CREATE_PROJECT':
+        case 'CREATE_PROJECT':   //if action type is create_project log that action and return state
             console.log('created project', action.project);
+            return state;
+        case 'CREATE_PROJECT_ERROR': //if projectAction is an error,
+            console.log('create project errpo', action.err)  ;
+            return state;
+        default:          //default case 
+            return state;  
     }
-    return state;
 } 
 
 export default projectReducer;
