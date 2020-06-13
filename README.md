@@ -1,4 +1,4 @@
-Tutorial series by the Net Ninja on Youtube of how to build a live project website using React, Redux and Firebase.
+Tutorial series by the Net Ninja on Youtube of how to build a live project management website using React, Redux and Firebase.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
